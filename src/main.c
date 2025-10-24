@@ -27,7 +27,7 @@
 /**********************************************************************************************************************/
 #include <stdio.h>
 #include "Common.h"
-
+#include "LED.h"
 
 /*********************************/
 /* HARDWARE INCLUDES             */
@@ -114,7 +114,7 @@ void main(void)
   I2CM_vidInitalize();
 
   // Add your initialization function here for the hardware modules...
-
+  LED_Init();
   /*********************************/
   /* DRIVER INITIALIZATIONS        */
   /*********************************/
@@ -129,7 +129,7 @@ void main(void)
 
   // End of the Init:
   CMN_vidEndInit();
-
+  static uint8_t LED_state = 0;
   // Main program loop:
   while(true)
   {
@@ -138,6 +138,10 @@ void main(void)
     
     // Send a "Hello World" message to the serial port:
     CMN_systemPrintf("Hello World ! \r\n");
+    
+    //Blink the LED 
+    LED_Pilot(LED_state);
+    LED_state = !LED_state;
   }
 
   // We should never reach this code part:

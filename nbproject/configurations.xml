@@ -17,6 +17,8 @@
       <itemPath>src/TOOLS/Common/Conf/Common_cfg.h</itemPath>
       <itemPath>src/TOOLS/Common/Core/Common.h</itemPath>
       <itemPath>src/TOOLS/Common/Port/Common_pt.h</itemPath>
+      <itemPath>src/LED.h</itemPath>
+      <itemPath>src/LED.c</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
