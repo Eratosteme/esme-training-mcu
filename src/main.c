@@ -90,7 +90,7 @@ void main_printf(AppManager_stateMachine *pStateMachine)
       CMN_systemPrintf("State Normal \r\n");
       break;
     case AppManager_APPSTATUS_INIT:
-      CMN_systemPrintf("State Normal \r\n");
+      CMN_systemPrintf("State INIT \r\n");
       break;
     case AppManager_APPSTATUS_BTNINTERRUPT:
       CMN_systemPrintf("State BtnInterupt \r\n");
@@ -149,7 +149,14 @@ void main(void)
   /*********************************/
   // Add your initialization function here for the application modules...
   AppManager_stateMachine main_AppManager_stateMachine;
-  AppManager_initialize(&main_AppManager_stateMachine);
+  main_AppManager_stateMachine.currentState = AppManager_APPSTATUS_INIT;
+  AppManager_status ret = AppManager_eSTATUS_NOK;
+  while (ret!=AppManager_eSTATUS_OK)
+  {
+    ret =AppManager_initialize(&main_AppManager_stateMachine);
+    if(ret == AppManager_eSTATUS_ptrERROR){CMN_systemPrintf("not init yet \r\n");}
+  }
+  CMN_systemPrintf("AppManager Inited \r\n");
   GPIO_registerBtnCallback(AppManager_btnAppCallBack);
   
   // End of the Init:

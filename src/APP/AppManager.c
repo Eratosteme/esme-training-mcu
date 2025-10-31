@@ -49,7 +49,7 @@ static void AppManager_onEnterBtnInterrupt(void)
 AppManager_status AppManager_initialize(AppManager_stateMachine *pStateMachine)
 {
   if (pStateMachine == NULL) return AppManager_eSTATUS_ptrERROR;
-
+ 
   pStateMachine->currentState = AppManager_APPSTATUS_INIT;
   appStateMachine = pStateMachine;
 

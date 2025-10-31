@@ -32,6 +32,7 @@ typedef enum GPIO_status
   GPIO_NOT_OK, // Erreur?
   GPIO_UNDEFINED,
   GPIO_CALLBACK_INIT_ERROR,
+  GPIO_CALLBACK_REGISTER_ERROR,
 }GPIO_status;
 
 typedef void (*GPIO_btnAppCallBackType)(void);
@@ -40,7 +41,7 @@ typedef void (*GPIO_btnAppCallBackType)(void);
 GPIO_status GPIO_initialize(void);
 GPIO_status GPIO_setGpioHigh(void);
 GPIO_status GPIO_setGpioLow(void);
-void GPIO_registerBtnCallback(GPIO_btnAppCallBackType callback);
+GPIO_status GPIO_registerBtnCallback(GPIO_btnAppCallBackType callback);
 
 #ifdef	__cplusplus
 }
