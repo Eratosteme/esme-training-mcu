@@ -27,7 +27,6 @@
 /**********************************************************************************************************************/
 #include <stdio.h>
 #include "Common.h"
-#include "LED.h"
 
 /*********************************/
 /* HARDWARE INCLUDES             */
@@ -38,6 +37,8 @@
 #include "TIMER.h"
 #include "EUSART.h"
 #include "I2CM.h"
+//#include "LED.h"
+#include "GPIO.h"
 
 // Add the required includes for the hardware modules here...
 
@@ -52,7 +53,7 @@
 /* APPLICATION INCLUDES          */
 /*********************************/
 // Add the required includes for the application modules here...
-
+#include "AppManager.h"
 
 /**********************************************************************************************************************/
 /* CONSTANTS, MACROS                                                                                                  */
@@ -75,12 +76,33 @@
 /**********************************************************************************************************************/
 /* PRIVATE FUNCTIONS PROTOTYPES                                                                                       */
 /**********************************************************************************************************************/
-
+void main_printf(AppManager_stateMachine *pStateMachine);
 
 
 /**********************************************************************************************************************/
 /* PRIVATE FUNCTION DEFINITIONS                                                                                       */
 /**********************************************************************************************************************/
+void main_printf(AppManager_stateMachine *pStateMachine)
+{
+  switch (pStateMachine->currentState)
+  {
+    case AppManager_APPSTATUS_NORMAL:
+      CMN_systemPrintf("State Normal \r\n");
+      break;
+    case AppManager_APPSTATUS_INIT:
+      CMN_systemPrintf("State Normal \r\n");
+      break;
+    case AppManager_APPSTATUS_BTNINTERRUPT:
+      CMN_systemPrintf("State BtnInterupt \r\n");
+      break;
+    case AppManager_APPSTATUS_ERROR:
+      CMN_systemPrintf("State error :/ \r\n");
+      break;
+    default:
+      CMN_systemPrintf("Very Weird, no state ... \r\n");
+      break;
+  }
+}
 
 
 
@@ -114,7 +136,7 @@ void main(void)
   I2CM_vidInitalize();
 
   // Add your initialization function here for the hardware modules...
-  LED_Init();
+  GPIO_initialize();
   /*********************************/
   /* DRIVER INITIALIZATIONS        */
   /*********************************/
@@ -126,10 +148,13 @@ void main(void)
   /* APPLICATION INITIALIZATIONS   */
   /*********************************/
   // Add your initialization function here for the application modules...
-
+  AppManager_stateMachine main_AppManager_stateMachine;
+  AppManager_initialize(&main_AppManager_stateMachine);
+  GPIO_registerBtnCallback(AppManager_btnAppCallBack);
+  
   // End of the Init:
   CMN_vidEndInit();
-  static uint8_t LED_state = 0;
+  static uint8_t main_LED_state = 0;
   // Main program loop:
   while(true)
   {
@@ -139,9 +164,12 @@ void main(void)
     // Send a "Hello World" message to the serial port:
     CMN_systemPrintf("Hello World ! \r\n");
     
-    //Blink the LED 
-    LED_Pilot(LED_state);
-    LED_state = !LED_state;
+    // print current state
+    main_printf(&main_AppManager_stateMachine);
+    
+    //Blink LED 
+    main_LED_state ? GPIO_setGpioHigh() : GPIO_setGpioLow();
+    main_LED_state = !main_LED_state;
   }
 
   // We should never reach this code part:
