@@ -46,6 +46,7 @@
 /* DRIVER INCLUDES               */
 /*********************************/
 #include "LCD.h"
+#include "SERP.h"
 
 // Add the required includes for the driver modules here...
 
@@ -141,6 +142,7 @@ void main(void)
   /* DRIVER INITIALIZATIONS        */
   /*********************************/
   LCD_vidInitialize();
+  SERP_enuInit();
 
   // Add your initialization function here for the driver modules...
 
