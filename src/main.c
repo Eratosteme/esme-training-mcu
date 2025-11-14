@@ -151,17 +151,26 @@ void main(void)
   AppManager_stateMachine main_AppManager_stateMachine;
   main_AppManager_stateMachine.currentState = AppManager_APPSTATUS_INIT;
   AppManager_status ret = AppManager_eSTATUS_NOK;
+  
   while (ret!=AppManager_eSTATUS_OK)
   {
     ret =AppManager_initialize(&main_AppManager_stateMachine);
-    if(ret == AppManager_eSTATUS_ptrERROR){CMN_systemPrintf("not init yet \r\n");}
+    
+    if(ret == AppManager_eSTATUS_ptrERROR)
+    {
+        CMN_systemPrintf("not init yet \r\n");
+    }
   }
+  
   CMN_systemPrintf("AppManager Inited \r\n");
+  
   GPIO_registerBtnCallback(AppManager_btnAppCallBack);
   
   // End of the Init:
   CMN_vidEndInit();
+  
   static uint8_t main_LED_state = 0;
+  
   // Main program loop:
   while(true)
   {

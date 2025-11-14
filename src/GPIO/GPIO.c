@@ -59,7 +59,7 @@ GPIO_status GPIO_registerBtnCallback(GPIO_btnAppCallBackType callback)
 {
     GPIO_status status = GPIO_OK;
   GPIO_btnAppCallBack = callback;
-  CMN_systemPrintf("registering callbackfct : %d \r\n",(*callback));
+  CMN_systemPrintf("registering callbackfct : %d \r\n",callback);
   if(!ISR_bRegisterIsrCbk(ISR_ePERIPHERAL_INPUT_GPIO, GPIO_BtnIsrCallBck))
   {
     status = GPIO_CALLBACK_REGISTER_ERROR;
