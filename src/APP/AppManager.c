@@ -26,15 +26,12 @@
 static AppManager_stateMachine *appStateMachine = NULL;
 
 /* PRIVATE FUNCTION PROTOTYPES */
+/* PRIVATE FUNCTION PROTOTYPES */
 static void AppManager_onEnterInit(void);
 static void AppManager_onEnterNormal(void);
-static void AppManager_onEnterBtnInterrupt(void)
-{
-    uint8_t msg[] = "Hello World";
-    SERP_enuSendMsg(SERP_CUSTOM_MSG_ID, msg, sizeof(msg) - 1);
 }
-
-static void AppManager_serpMsgReceived(uint8_t msgId, uint16_t length, const uint8_t *data); // pour le serp
+static void AppManager_onEnterBtnInterrupt(void);
+static void AppManager_serpMsgReceived(uint8_t msgId, uint16_t length, const uint8_t *data);
 
 /* PRIVATE FUNCTION DEFINITIONS */
 static void AppManager_onEnterInit(void)
@@ -46,7 +43,11 @@ static void AppManager_onEnterNormal(void)
 {
   // TODO
 }
-
+static void AppManager_onEnterBtnInterrupt(void)
+{
+    uint8_t msg[] = "Hello World";
+    SERP_enuSendMsg(SERP_CUSTOM_MSG_ID, msg, sizeof(msg) - 1);
+}
 
 /* gestion des messages SERP */
 static void AppManager_serpMsgReceived(uint8_t msgId, uint16_t length, const uint8_t *data)
@@ -114,5 +115,5 @@ AppManager_status AppManager_changeState(AppManager_stateMachine *pStateMachine,
 /* GPIO callback triggered by ISR */
 void AppManager_btnAppCallBack(void)
 {
-  AppManager_changeState(appStateMachine, AppManager_APPSTATUS_BTNINTERRUPT);
+    AppManager_changeState(appStateMachine, AppManager_APPSTATUS_BTNINTERRUPT);
 }
