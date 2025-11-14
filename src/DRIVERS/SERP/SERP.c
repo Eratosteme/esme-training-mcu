@@ -23,10 +23,7 @@
 
 #define SERP_TEMPERATURE_MSG_ID   18
 #define SERP_LIVE_MSG_ID          19
-#define SERP_CUSTOM_MSG_ID 20u
-
-
-
+#define SERP_CUSTOM_MSG_ID        20u
 
 #define SERP_MAX_DATA_LEN         50
 #define SERP_MAX_RAW_FRAME_BYTES  (2 + 1 + SERP_MAX_DATA_LEN)
@@ -50,7 +47,9 @@ static uint8_t SERP_au8RxDataBuffer[SERP_MAX_DATA_LEN];
 static void SERP_vidResetRxState(void);
 static void SERP_vidProcessCompleteFrame(void);
 static void SERP_vidSendEncodedByte(uint8_t b);
-static void SERP_vidEusartRxCallback(uint8_t u8Byte);
+static void SERP_vidEusartRxCallback(char const * const data,
+                                     const uint16_t length,
+                                     const EUSART_tenuStatus status);
 
 /* PRIVATE FUNCTION DEFINITIONS */
 static void SERP_vidResetRxState(void)
@@ -62,9 +61,9 @@ static void SERP_vidResetRxState(void)
 static void SERP_vidSendEncodedByte(uint8_t b)
 {
     if (b == SERP_START_BYTE || b == SERP_STOP_BYTE || b == SERP_ESCAPE_BYTE)
-        EUSART_enuWriteByte(SERP_ESCAPE_BYTE);
+        EUSART_vidSendChar((char)SERP_ESCAPE_BYTE, CMN_10_MS);
 
-    EUSART_enuWriteByte(b);
+    EUSART_vidSendChar((char)b, CMN_10_MS);
 }
 
 static void SERP_vidProcessCompleteFrame(void)
@@ -94,8 +93,15 @@ static void SERP_vidProcessCompleteFrame(void)
         SERP_pfAppCallback(id, length, SERP_au8RxDataBuffer);
 }
 
-static void SERP_vidEusartRxCallback(uint8_t u8Byte)
+static void SERP_vidEusartRxCallback(char const * const data,
+                                     const uint16_t length,
+                                     const EUSART_tenuStatus status)
 {
+    if ((length == 0) || (status != EUSART_eSTATUS_OK))
+        return;
+
+    uint8_t u8Byte = (uint8_t)data[0];
+
     switch (SERP_enRxState)
     {
         case SERP_RX_IDLE:
@@ -143,7 +149,9 @@ SERP_tenuStatus SERP_enuInit(void)
 {
     SERP_vidResetRxState();
     SERP_pfAppCallback = 0;
+
     EUSART_enuRegisterRxCbk(SERP_vidEusartRxCallback);
+
     return SERP_enOK;
 }
 
@@ -165,7 +173,7 @@ SERP_tenuStatus SERP_enuSendMsg(uint8_t u8MsgId, const uint8_t *pData, uint16_t 
     if ((len > SERP_MAX_DATA_LEN) || (len > 0 && pData == 0))
         return SERP_enINVALID_PARAM;
 
-    EUSART_enuWriteByte(SERP_START_BYTE);
+    EUSART_vidSendChar((char)SERP_START_BYTE, CMN_10_MS);
 
     SERP_vidSendEncodedByte(L);
     SERP_vidSendEncodedByte(H);
@@ -174,7 +182,7 @@ SERP_tenuStatus SERP_enuSendMsg(uint8_t u8MsgId, const uint8_t *pData, uint16_t 
     for (i = 0; i < len; i++)
         SERP_vidSendEncodedByte(pData[i]);
 
-    EUSART_enuWriteByte(SERP_STOP_BYTE);
+    EUSART_vidSendChar((char)SERP_STOP_BYTE, CMN_10_MS);
 
     return SERP_enOK;
 }

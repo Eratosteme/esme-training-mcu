@@ -19,10 +19,12 @@
 #include <stdbool.h>
 
 /* CONSTANTS MACROS */
-#define SERP_START_MEASURE_MSG_ID   17u
-#define SERP_STOP_MEASURE_MSG_ID    18u
-#define SERP_TEMP_VALUE_MSG_ID      19u
-#define SERP_LIVE_SIGN_MSG_ID       20u
+/* IDs provenant de la slide 61 */
+#define SERP_START_MEASURE_MSG_ID   17u     /* RX depuis l'IHM */
+#define SERP_STOP_MEASURE_MSG_ID    18u     /* RX depuis l'IHM */
+#define SERP_TEMP_VALUE_MSG_ID      18u     /* TX vers l'IHM (1 octet) */
+#define SERP_LIVE_SIGN_MSG_ID       19u     /* TX vers l'IHM */
+#define SERP_CUSTOM_MSG_ID          20u     /* TX jusqu'à 50 octets */
 
 /* TYPES */
 typedef enum
