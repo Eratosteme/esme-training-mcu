@@ -29,7 +29,6 @@ static AppManager_stateMachine *appStateMachine = NULL;
 /* PRIVATE FUNCTION PROTOTYPES */
 static void AppManager_onEnterInit(void);
 static void AppManager_onEnterNormal(void);
-}
 static void AppManager_onEnterBtnInterrupt(void);
 static void AppManager_serpMsgReceived(uint8_t msgId, uint16_t length, const uint8_t *data);
 
