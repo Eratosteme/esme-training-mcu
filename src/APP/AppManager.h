@@ -33,8 +33,12 @@ typedef enum AppManager_status
     
 typedef enum AppManager_appState
 {
-  AppManager_APPSTATUS_NORMAL = 0,
-  AppManager_APPSTATUS_INIT,
+  AppManager_APPSTATUS_INIT = 0,
+  AppManager_APPSTATUS_NORMAL,
+  AppManager_APPSTATUS_BLINK,
+  AppManager_APPSTATUS_TEMPERATURE,
+  AppManager_APPSTATUS_BLINKTEMP,
+  AppManager_APPSTATUS_SLEEP,
   AppManager_APPSTATUS_BTNINTERRUPT,
   AppManager_APPSTATUS_ERROR, // Default value for errors
 }AppManager_appState;
@@ -49,6 +53,7 @@ AppManager_status AppManager_initialize(AppManager_stateMachine *pStateMachine);
 void AppManager_btnAppCallBack(void);
 AppManager_appState AppManager_getCurrentState(AppManager_stateMachine *pStateMachine);
 AppManager_status AppManager_changeState(AppManager_stateMachine *pStateMachine, AppManager_appState newState);
+AppManager_run(void);
 
 #ifdef	__cplusplus
 }

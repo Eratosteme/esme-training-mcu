@@ -148,6 +148,11 @@ void main(void)
   /* APPLICATION INITIALIZATIONS   */
   /*********************************/
   // Add your initialization function here for the application modules...
+  AppManager_initialize();
+  
+  // CALLBACK INITAIALISATION
+  GPIO_registerBtnCallback(AppManager_btnAppCallBack);
+  /*
   AppManager_stateMachine main_AppManager_stateMachine;
   main_AppManager_stateMachine.currentState = AppManager_APPSTATUS_INIT;
   AppManager_status ret = AppManager_eSTATUS_NOK;
@@ -165,13 +170,18 @@ void main(void)
   CMN_systemPrintf("AppManager Inited \r\n");
   
   GPIO_registerBtnCallback(AppManager_btnAppCallBack);
-  
+  */
   // End of the Init:
   CMN_vidEndInit();
   
-  static uint8_t main_LED_state = 0;
   
   // Main program loop:
+  AppManager_run();
+  
+  /*
+  static uint8_t main_LED_state = 0;
+  
+  
   while(true)
   {
     // Performs a delay of 0.5s:
@@ -186,7 +196,7 @@ void main(void)
     //Blink LED 
     main_LED_state ? GPIO_setGpioHigh() : GPIO_setGpioLow();
     main_LED_state = !main_LED_state;
-  }
+  }*/
 
   // We should never reach this code part:
   CMN_abortAll();

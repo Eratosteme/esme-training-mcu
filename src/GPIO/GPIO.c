@@ -43,7 +43,7 @@ bool GPIO_BtnIsrCallBck(void)
   // check if the interrupt is from button at pin B4 and falling-edge
   CMN_systemPrintf("Interrupt : %d \r\n",IOCBFbits.IOCBF4);
   if (IOCBFbits.IOCBF4) {
-    CMN_systemPrintf("Button Pressed ! \r\n");
+    //CMN_systemPrintf("Button Pressed ! \r\n");
     IOCBFbits.IOCBF4 = 0;  // Clear the flag
     if (GPIO_btnAppCallBack != NULL) {
       CMN_systemPrintf("ButtonCallback ! \r\n");
@@ -57,13 +57,20 @@ bool GPIO_BtnIsrCallBck(void)
 /* PUBLIC FUNCTION DEFINITIONS */
 GPIO_status GPIO_registerBtnCallback(GPIO_btnAppCallBackType callback)
 {
-    GPIO_status status = GPIO_OK;
+  GPIO_status status = GPIO_OK;
+  
+  if(callback == NULL)
+  {
+    CMN_systemPrintf("error: no callback function given \r\n"):
+    return GPIO_CALLBACK_INIT_ERROR;
+  }
+  
   GPIO_btnAppCallBack = callback;
   CMN_systemPrintf("registering callbackfct : %d \r\n",callback);
   if(!ISR_bRegisterIsrCbk(ISR_ePERIPHERAL_INPUT_GPIO, GPIO_BtnIsrCallBck))
   {
     status = GPIO_CALLBACK_REGISTER_ERROR;
-    CMN_systemPrintf("errot registering callback fct \r\n");
+    CMN_systemPrintf("error registering callback function \r\n");
   }
   return status;
 }
