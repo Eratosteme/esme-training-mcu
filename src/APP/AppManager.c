@@ -10,6 +10,7 @@
 #include "GPIO.h"
 #include "CLOCK.h"
 #include "MCP9700.h" // Inclusion du driver
+#include "SERP.h"
 
 static AppManager_appState currentState = AppManager_APPSTATUS_INIT;
 static volatile bool buttonClicked = false;
@@ -82,6 +83,8 @@ static void AppManager_modeSleep(void)
 void AppManager_btnAppCallBack(void)
 {
   buttonClicked = true;
+  uint8_t myMsg[] = "Hello World";
+  SERP_enuSendMessage(SERP_ID_TX_CUSTOM_MSG, myMsg, 11); 
 }
 
 AppManager_status AppManager_run(void)
