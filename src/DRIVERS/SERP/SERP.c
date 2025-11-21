@@ -23,7 +23,7 @@
 
 #define SERP_TEMPERATURE_MSG_ID   18
 #define SERP_LIVE_MSG_ID          19
-#define SERP_CUSTOM_MSG_ID        20u
+#define SERP_CUSTOM_MSG_ID        20
 
 #define SERP_MAX_DATA_LEN         50
 #define SERP_MAX_RAW_FRAME_BYTES  (2 + 1 + SERP_MAX_DATA_LEN)
