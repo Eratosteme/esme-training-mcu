@@ -15,6 +15,7 @@
 #include "LCD.h"
 #include "MCP9700.h"   // Driver Capteur
 #include "AppManager.h"
+#include "SERP.h"
 
 void main(void)
 {
@@ -40,6 +41,7 @@ void main(void)
   /* DRIVERS */
   LCD_vidInitialize();
   MCP9700_Init();
+  SERP_vidInitialize();
 
   // Add your initialization function here for the driver modules...
 

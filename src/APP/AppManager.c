@@ -10,6 +10,7 @@
 #include "GPIO.h"
 #include "CLOCK.h"
 #include "MCP9700.h" // Inclusion du driver
+#include "SERP.h"
 
 /* CONSTANTS MACROS */
 #define APPMANAGER_VERSION "1.0"
@@ -105,6 +106,8 @@ static void AppManager_modeSleep(void)
 void AppManager_btnAppCallBack(void)
 {
   buttonClicked = true;
+  uint8_t myMsg[] = "Hello World";
+  SERP_enuSendMessage(SERP_ID_TX_CUSTOM_MSG, myMsg, 11); 
 }
 
 AppManager_status AppManager_initialise(void)
