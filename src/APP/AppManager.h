@@ -44,16 +44,8 @@ typedef enum AppManager_appState
   AppManager_APPSTATUS_ERROR, // Default value for errors
 }AppManager_appState;
 
-/*typedef struct AppManager_stateMachine
-{
-  AppManager_appState currentState;
-}AppManager_stateMachine;*/
-
 /* PUBLIC FUNCTION PROTOTYPES */
-//AppManager_status AppManager_initialize(AppManager_stateMachine *pStateMachine);
 void AppManager_btnAppCallBack(void);
-//AppManager_appState AppManager_getCurrentState(AppManager_stateMachine *pStateMachine);
-//AppManager_status AppManager_changeState(AppManager_stateMachine *pStateMachine, AppManager_appState newState);
 AppManager_status AppManager_run(void);
 
 #ifdef	__cplusplus
