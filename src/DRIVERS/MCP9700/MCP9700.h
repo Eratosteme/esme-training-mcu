@@ -1,28 +1,39 @@
 /* 
  * File:   MCP9700.h
- * Author: mperr
- *
- * Created on 14 novembre 2025, 13:39
+ * Author: Esme Sudria
  */
 
 #ifndef MCP9700_H
 #define	MCP9700_H
 
+#include <stdint.h>
+
 #ifdef	__cplusplus
 extern "C" {
 #endif
 
-#define MCP9700_OFFSET_MV   500U  // Offset en mV (0°C)
-#define MCP9700_SCALE_MV_C  10U   // Sensibilité : 10mV/°C
+/* CONFIGURATION */
+// Tension de référence ADC (généralement 3300mV ou 5000mV sur votre carte)
+#define MCP9700_VREF_MV         3300U   
 
-// Prototype des fonctions
+// Résolution ADC du PIC18F47Q10 (10 bits)
+#define MCP9700_ADC_RESOLUTION  1024U   
+
+/* CARACTERISTIQUES CAPTEUR */
+#define MCP9700_OFFSET_MV       500U    // 500mV à 0°C
+// Pente : 10mV par °C
+
+/* PROTOTYPES */
 void MCP9700_Init(void);
-uint16_t MCP9700_ReadRaw(void);
-float MCP9700_ConvertToCelsius(uint16_t adcValue);
+
+/**
+ * @brief Lit la température et retourne des dixièmes de degrés.
+ * @return Ex: 235 pour 23.5°C. Retourne -9999 en cas d'erreur.
+ */
+int16_t MCP9700_GetDeciCelsius(void);
 
 #ifdef	__cplusplus
 }
 #endif
 
 #endif	/* MCP9700_H */
-
