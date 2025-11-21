@@ -61,12 +61,12 @@ GPIO_status GPIO_registerBtnCallback(GPIO_btnAppCallBackType callback)
   
   if(callback == NULL)
   {
-    CMN_systemPrintf("error: no callback function given \r\n"):
+    CMN_systemPrintf("error: no callback function given \r\n");
     return GPIO_CALLBACK_INIT_ERROR;
   }
   
   GPIO_btnAppCallBack = callback;
-  CMN_systemPrintf("registering callbackfct : %d \r\n",callback);
+  CMN_systemPrintf("registering callback function : %d \r\n",callback);
   if(!ISR_bRegisterIsrCbk(ISR_ePERIPHERAL_INPUT_GPIO, GPIO_BtnIsrCallBck))
   {
     status = GPIO_CALLBACK_REGISTER_ERROR;

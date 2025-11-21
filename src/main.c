@@ -76,13 +76,13 @@
 /**********************************************************************************************************************/
 /* PRIVATE FUNCTIONS PROTOTYPES                                                                                       */
 /**********************************************************************************************************************/
-void main_printf(AppManager_stateMachine *pStateMachine);
+//void main_printf(AppManager_stateMachine *pStateMachine);
 
 
 /**********************************************************************************************************************/
 /* PRIVATE FUNCTION DEFINITIONS                                                                                       */
 /**********************************************************************************************************************/
-void main_printf(AppManager_stateMachine *pStateMachine)
+/*void main_printf(AppManager_stateMachine *pStateMachine)
 {
   switch (pStateMachine->currentState)
   {
@@ -102,7 +102,7 @@ void main_printf(AppManager_stateMachine *pStateMachine)
       CMN_systemPrintf("Very Weird, no state ... \r\n");
       break;
   }
-}
+}*/
 
 
 
@@ -148,7 +148,7 @@ void main(void)
   /* APPLICATION INITIALIZATIONS   */
   /*********************************/
   // Add your initialization function here for the application modules...
-  AppManager_initialize();
+  //AppManager_initialize();
   
   // CALLBACK INITAIALISATION
   GPIO_registerBtnCallback(AppManager_btnAppCallBack);

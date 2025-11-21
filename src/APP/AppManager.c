@@ -16,14 +16,16 @@
 /* INCLUDE FILES */
 #include "AppManager.h"
 #include <stdio.h>
-#include "common.h"
+#include "Common.h"
+#include "GPIO.h"
+#include "CLOCK.h"
 
 /* CONSTANTS MACROS */
  
 /* TYPES */
  
 /* PRIVATE VARIABLES */
-static AppManager_stateMachine *appStateMachine = NULL;
+//static AppManager_stateMachine *appStateMachine = NULL;
 static AppManager_appState currentState = AppManager_APPSTATUS_INIT;
 static bool buttonClicked = false;
 
@@ -57,17 +59,17 @@ static void AppManager_onEnterBtnInterrupt(void)
 }*/
 
 /* PUBLIC FUNCTION DEFINITIONS */
-AppManager_status AppManager_initialize(void)
+/*AppManager_status AppManager_initialize(void)
 {
-  /*if (pStateMachine == NULL) return AppManager_eSTATUS_ptrERROR;
+  if (pStateMachine == NULL) return AppManager_eSTATUS_ptrERROR;
  
   pStateMachine->currentState = AppManager_APPSTATUS_INIT;
   appStateMachine = pStateMachine;
 
-  AppManager_onEnterInit();*/
+  AppManager_onEnterInit();
   currentState = AppManager_APPSTATUS_NORMAL;
   return AppManager_eSTATUS_OK;
-}
+}*/
 /*
 AppManager_appState AppManager_getCurrentState(AppManager_stateMachine *pStateMachine)
 {
@@ -107,7 +109,7 @@ void AppManager_btnAppCallBack(void)
   buttonClicked = true;
 }
 
-void AppManager_run(void)
+AppManager_status AppManager_run(void)
 {
   currentState = AppManager_APPSTATUS_NORMAL;
   CMN_systemPrintf("ButtonCallback ! \r\n");
@@ -159,4 +161,48 @@ void AppManager_run(void)
         break;
     }
   }
+  return AppManager_unexpected_end;
+}
+
+static void AppManager_modeNormal(void)
+{
+  GPIO_setGpioHigh(); //set the led on, don't blink it
+  CMN_systemPrintf("AppManager mode Normal \r\n");
+  __delay_ms(500);
+}
+
+static void AppManager_modeBlink(void)
+{
+  //LED blinking logic
+  static bool AppManager_LED_state = false;
+  AppManager_LED_state ? GPIO_setGpioHigh() : GPIO_setGpioLow();
+  AppManager_LED_state = !AppManager_LED_state;
+  
+  CMN_systemPrintf("AppManager mode Blink \r\n");
+  __delay_ms(500);
+}
+
+static void AppManager_modeTemperature(void)
+{
+  CMN_systemPrintf("AppManager mode Temperature \r\n");
+  __delay_ms(500);
+}
+
+static void AppManager_modeBlinkTemp(void)
+{
+  //LED blinking logic
+  static bool AppManager_LED_state = false;
+  AppManager_LED_state ? GPIO_setGpioHigh() : GPIO_setGpioLow();
+  AppManager_LED_state = !AppManager_LED_state;
+  
+  CMN_systemPrintf("AppManager mode Blink and Temperature \r\n");
+  __delay_ms(500);
+}
+
+static void AppManager_modeSleep(void)
+{
+  CMN_systemPrintf("AppManager mode Sleep \r\n");
+  CMN_systemPrintf("Entering Sleep mode ...\nPress button to awaken \r\n");
+  SLEEP();//wait until button pressed or other interrupt 
+  __delay_ms(500);
 }
