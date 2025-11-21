@@ -4,6 +4,13 @@
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
                    projectFiles="true">
+      <logicalFolder name="MCC Generated Files"
+                     displayName="MCC Generated Files"
+                     projectFiles="true">
+        <itemPath>mcc_generated_files/device_config.h</itemPath>
+        <itemPath>mcc_generated_files/mcc.h</itemPath>
+        <itemPath>mcc_generated_files/pin_manager.h</itemPath>
+      </logicalFolder>
       <itemPath>src/DRIVERS/LCD/Conf/LCD_cfg.h</itemPath>
       <itemPath>src/DRIVERS/LCD/Core/LCD.h</itemPath>
       <itemPath>src/HARDWARE/ADC/Conf/ADC_cfg.h</itemPath>
@@ -26,6 +33,7 @@
                    displayName="Important Files"
                    projectFiles="true">
       <itemPath>Makefile</itemPath>
+      <itemPath>esme-training-mcu.git.mc3</itemPath>
     </logicalFolder>
     <logicalFolder name="LinkerScript"
                    displayName="Linker Files"
@@ -34,6 +42,13 @@
     <logicalFolder name="SourceFiles"
                    displayName="Source Files"
                    projectFiles="true">
+      <logicalFolder name="MCC Generated Files"
+                     displayName="MCC Generated Files"
+                     projectFiles="true">
+        <itemPath>mcc_generated_files/mcc.c</itemPath>
+        <itemPath>mcc_generated_files/pin_manager.c</itemPath>
+        <itemPath>mcc_generated_files/device_config.c</itemPath>
+      </logicalFolder>
       <itemPath>src/main.c</itemPath>
       <itemPath>src/DRIVERS/LCD/Core/LCD.c</itemPath>
       <itemPath>src/HARDWARE/ADC/Core/ADC.c</itemPath>
@@ -47,6 +62,7 @@
       <itemPath>src/DRIVERS/LCD/Conf/LCD_cfg.c</itemPath>
       <itemPath>src/GPIO/GPIO.c</itemPath>
       <itemPath>src/APP/AppManager.c</itemPath>
+      <itemPath>main.c</itemPath>
     </logicalFolder>
     <itemPath>src/DRIVERS/SERP/SERP.c</itemPath>
     <itemPath>src/DRIVERS/SERP/SERP.h</itemPath>
@@ -62,7 +78,7 @@
         <targetDevice>PIC18F47Q10</targetDevice>
         <targetHeader></targetHeader>
         <targetPluginBoard></targetPluginBoard>
-        <platformTool>noID</platformTool>
+        <platformTool>pkob4hybrid</platformTool>
         <languageToolchain>XC8</languageToolchain>
         <languageToolchainVersion>3.10</languageToolchainVersion>
         <platform>4</platform>
@@ -1203,8 +1219,8 @@
         <property key="communication.interface" value=""/>
         <property key="communication.interface.jtag" value="2wire"/>
         <property key="communication.speed" value="${communication.speed.default}"/>
-        <property key="debugoptions.debug-startup" value="Halt at main"/>
-        <property key="debugoptions.reset-behaviour" value="Main"/>
+        <property key="debugoptions.debug-startup" value="Use system settings"/>
+        <property key="debugoptions.reset-behaviour" value="Use system settings"/>
         <property key="debugoptions.simultaneous.debug" value="false"/>
         <property key="debugoptions.useswbreakpoints" value="false"/>
         <property key="freeze.timers" value="false"/>
