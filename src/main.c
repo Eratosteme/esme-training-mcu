@@ -116,11 +116,9 @@ void main(void)
   /* APPLICATION INITIALIZATIONS   */
   /*********************************/
   // Add your initialization function here for the application modules...
+  AppManager_initialise();
   
-  // CALLBACK INITAIALISATION
-  GPIO_registerBtnCallback(AppManager_btnAppCallBack);
-  
-  // End of the Init:
+  // End of the initialization:
   CMN_vidEndInit();
   
   // Main program loop:

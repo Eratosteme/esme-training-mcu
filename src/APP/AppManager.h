@@ -31,21 +31,10 @@ typedef enum AppManager_status
   AppManager_eSTATUS_ptrERROR,
   AppManager_unexpected_end,
 }AppManager_status; 
-    
-typedef enum AppManager_appState
-{
-  AppManager_APPSTATUS_INIT = 0,
-  AppManager_APPSTATUS_NORMAL,
-  AppManager_APPSTATUS_BLINK,
-  AppManager_APPSTATUS_TEMPERATURE,
-  AppManager_APPSTATUS_BLINKTEMP,
-  AppManager_APPSTATUS_SLEEP,
-  AppManager_APPSTATUS_BTNINTERRUPT,
-  AppManager_APPSTATUS_ERROR, // Default value for errors
-}AppManager_appState;
+
 
 /* PUBLIC FUNCTION PROTOTYPES */
-void AppManager_btnAppCallBack(void);
+AppManager_status AppManager_initialise(void);
 AppManager_status AppManager_run(void);
 
 #ifdef	__cplusplus

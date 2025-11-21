@@ -21,8 +21,21 @@
 #include "CLOCK.h"
 
 /* CONSTANTS MACROS */
- 
+#define APPMANAGER_VERSION "1.0"
+
 /* TYPES */
+    
+typedef enum AppManager_appState
+{
+  AppManager_APPSTATUS_INIT = 0,
+  AppManager_APPSTATUS_NORMAL,
+  AppManager_APPSTATUS_BLINK,
+  AppManager_APPSTATUS_TEMPERATURE,
+  AppManager_APPSTATUS_BLINKTEMP,
+  AppManager_APPSTATUS_SLEEP,
+  AppManager_APPSTATUS_BTNINTERRUPT,
+  AppManager_APPSTATUS_ERROR, // Default value for errors
+}AppManager_appState;
  
 /* PRIVATE VARIABLES */
 //static AppManager_stateMachine *appStateMachine = NULL;
@@ -30,6 +43,7 @@ static AppManager_appState currentState = AppManager_APPSTATUS_INIT;
 static bool buttonClicked = false;
 
 /* PRIVATE FUNCTION PROTOTYPES */
+void AppManager_btnAppCallBack(void);
 static void AppManager_modeNormal(void);
 static void AppManager_modeBlink(void);
 static void AppManager_modeTemperature(void);
@@ -59,6 +73,7 @@ static void AppManager_modeBlink(void)
 
 static void AppManager_modeTemperature(void)
 {
+  GPIO_setGpioHigh(); //set the led on, don't blink it
   CMN_systemPrintf("AppManager mode Temperature \r\n");
   __delay_ms(500);
 }
@@ -76,6 +91,7 @@ static void AppManager_modeBlinkTemp(void)
 
 static void AppManager_modeSleep(void)
 {
+  GPIO_setGpioLow(); //set the led on, don't blink it
   CMN_systemPrintf("AppManager mode Sleep \r\n");
   CMN_systemPrintf("Entering Sleep mode ...\nPress button to awaken \r\n");
   SLEEP();//wait until button pressed or other interrupt 
@@ -90,6 +106,22 @@ void AppManager_btnAppCallBack(void)
 {
   //AppManager_changeState(&appStateMachine, AppManager_APPSTATUS_BTNINTERRUPT);
   buttonClicked = true;
+}
+
+AppManager_status AppManager_initialise(void)
+{
+  AppManager_status status = AppManager_eSTATUS_OK;
+  CMN_systemPrintf("Init AppManager version : %s\r\n", APPMANAGER_VERSION);
+  GPIO_status ret = GPIO_registerBtnCallback(AppManager_btnAppCallBack);
+  if (ret != GPIO_OK)
+  {
+    if ((ret == GPIO_CALLBACK_INIT_ERROR)||(ret == GPIO_CALLBACK_REGISTER_ERROR))
+    {
+        status = AppManager_eSTATUS_ptrERROR;
+    }
+    status = AppManager_eSTATUS_NOK;
+  }
+  return status;
 }
 
 AppManager_status AppManager_run(void)
