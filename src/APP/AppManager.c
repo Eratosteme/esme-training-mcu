@@ -13,7 +13,7 @@
 #include "SERP.h"
 
 /* CONSTANTS MACROS */
-#define APPMANAGER_VERSION "1.0"
+#define APPMANAGER_VERSION "1.3"
 
 /* TYPES */
     
@@ -101,14 +101,14 @@ static void AppManager_modeSleep(void)
   __delay_ms(500);
 }
 
-/* Publiques */
-
 void AppManager_btnAppCallBack(void)
 {
   buttonClicked = true;
   uint8_t myMsg[] = "Hello World";
   SERP_enuSendMessage(SERP_ID_TX_CUSTOM_MSG, myMsg, 11); 
 }
+
+/* Publiques */
 
 AppManager_status AppManager_initialise(void)
 {
