@@ -9,7 +9,7 @@
  * @author    Nicolas MARTI
  * @date      27/11/2025
  *
- * @version   0.0.2
+ * @version   0.1.3
  *
  * @brief     AppManager, state machine that oversee the current running process
  * @details   This module should be initialized with AppManager_initialize()

@@ -1,22 +1,54 @@
-/* 
- * File:     AppManager.c
- * Author:   Esme Sudria
+/**
+ ***********************************************************************************************************************
+ * Company: Esme Sudria
+ * Project: Projet Esme
+ *
+ ***********************************************************************************************************************
+ * @file      AppManager.c
+ *
+ * @author    Nicolas MARTI
+ * @date      27/11/2025
+ *
+ * @version   0.1.3
+ *
+ * @brief     AppManager, state machine that oversee the current running process
+ * @details   This module should be initialized with AppManager_initialize()
+ *            Then it can you should run it with AppManager_run()
+ *            /!\ AppManager_run() should be run only once, as it contain 
+ *            an infinite event loop.
+ *
+ * @remark    Coding Language: C
+ *
+ * @copyright Copyright (c) 2025 This software is used for education proposal
+ *
+ ***********************************************************************************************************************
  */
 
+/**********************************************************************************************************************/
+/* INCLUDE FILES                                                                                                      */
+/**********************************************************************************************************************/
 #include "AppManager.h"
 #include <stdio.h>
-#include <stdlib.h> // pour abs()
+#include <stdlib.h> // for abs()
 #include "Common.h"
 #include "GPIO.h"
 #include "CLOCK.h"
-#include "MCP9700.h" // Inclusion du driver
+#include "MCP9700.h" // Driver for temperature
 #include "SERP.h"
 
-/* CONSTANTS MACROS */
+/**********************************************************************************************************************/
+/* CONSTANTS, MACROS                                                                                                  */
+/**********************************************************************************************************************/
 #define APPMANAGER_VERSION "1.3"
 
-/* TYPES */
-    
+
+/**********************************************************************************************************************/
+/* TYPES                                                                                                              */
+/**********************************************************************************************************************/
+/**
+ * @brief type for the state of AppManager
+ * @details New true states should be added before AppManager_APPSTATUS_SLEEP
+ */
 typedef enum AppManager_appState
 {
   AppManager_APPSTATUS_INIT = 0,
@@ -24,17 +56,42 @@ typedef enum AppManager_appState
   AppManager_APPSTATUS_BLINK,
   AppManager_APPSTATUS_TEMPERATURE,
   AppManager_APPSTATUS_BLINKTEMP,
-  AppManager_APPSTATUS_SLEEP,
+  AppManager_APPSTATUS_SLEEP, // last true state type before error types
   AppManager_APPSTATUS_BTNINTERRUPT,
   AppManager_APPSTATUS_ERROR, // Default value for errors
 }AppManager_appState;
  
-/* PRIVATE VARIABLES */
+
+
+/**********************************************************************************************************************/
+/* PRIVATE VARIABLES                                                                                                  */
+/**********************************************************************************************************************/
+/**
+ * @TODO delete that later
+ */
 //static AppManager_stateMachine *appStateMachine = NULL;
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+/**
+ * @brief global state of the AppManager
+ */
 static AppManager_appState currentState = AppManager_APPSTATUS_INIT;
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+/**
+ * @brief register to remember if a button has been clicked
+ */
 static volatile bool buttonClicked = false;
 
-/* PRIVATE FUNCTION PROTOTYPES */
+
+/**********************************************************************************************************************/
+/* PRIVATE FUNCTION PROTOTYPES                                                                                       */
+/**********************************************************************************************************************/
+/**
+ * @brief Callback function registered to the interrupt module and called when an interruption triggers to check if this
+ *        interruption came from the timer TIM0
+ * @details See "PIC18F47Q10 - Datasheet", P.194, 14.9"
+ */
 void AppManager_btnAppCallBack(void);
 static void AppManager_modeNormal(void);
 static void AppManager_modeBlink(void);
