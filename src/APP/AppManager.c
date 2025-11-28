@@ -28,6 +28,7 @@
 /* INCLUDE FILES                                                                                                      */
 /**********************************************************************************************************************/
 #include "AppManager.h"
+#include "SERP.h" 
 #include <stdio.h>
 #include <stdlib.h> // for abs()
 #include "Common.h"
@@ -156,6 +157,77 @@ static void AppManager_modeSleep(void)
   CMN_systemPrintf("Entering Sleep mode ...\nPress button to awaken \r\n");
   SLEEP();//wait until button pressed or other interrupt 
   __delay_ms(500);
+    /* Envoi du message "Hello World" vers l'IHM */
+    static const uint8_t msg[] = "Hello World";
+    SERP_enuSendMsg(SERP_CUSTOM_MSG_ID, msg, sizeof(msg) - 1);
+}
+
+/* gestion des messages SERP */
+static void AppManager_serpMsgReceived(uint8_t msgId, uint16_t length, const uint8_t *data)
+{
+    switch (msgId)
+    {
+        case SERP_START_MEASURE_MSG_ID:
+            AppManager_changeState(appStateMachine, AppManager_APPSTATUS_NORMAL);
+            break;
+
+        case SERP_STOP_MEASURE_MSG_ID:
+            AppManager_changeState(appStateMachine, AppManager_APPSTATUS_INIT);
+            break;
+
+        default:
+            /* Message non utilisé */
+            break;
+    }
+}
+
+/* PUBLIC FUNCTION DEFINITIONS */
+AppManager_status AppManager_initialize(AppManager_stateMachine *pStateMachine)
+{
+    if (pStateMachine == NULL) return AppManager_eSTATUS_ptrERROR;
+
+    pStateMachine->currentState = AppManager_APPSTATUS_INIT;
+    appStateMachine = pStateMachine;
+
+    /* Enregistrement du callback SERP */
+    SERP_enuRegisterAppCbk(AppManager_serpMsgReceived);
+
+    AppManager_onEnterInit();
+    return AppManager_eSTATUS_OK;
+}
+
+AppManager_appState AppManager_getCurrentState(AppManager_stateMachine *pStateMachine)
+{
+    if (pStateMachine == NULL) return AppManager_APPSTATUS_ERROR;
+    return pStateMachine->currentState;
+}
+
+AppManager_status AppManager_changeState(AppManager_stateMachine *pStateMachine, AppManager_appState newState)
+{
+    if (pStateMachine == NULL) return AppManager_eSTATUS_ptrERROR;
+
+    pStateMachine->currentState = newState;
+    appStateMachine = pStateMachine;
+
+    switch (newState)
+    {
+        case AppManager_APPSTATUS_INIT:
+            AppManager_onEnterInit();
+            break;
+
+        case AppManager_APPSTATUS_NORMAL:
+            AppManager_onEnterNormal();
+            break;
+
+        case AppManager_APPSTATUS_BTNINTERRUPT:
+            AppManager_onEnterBtnInterrupt();
+            break;
+
+        default:
+            break;
+    }
+
+    return AppManager_eSTATUS_OK;
 }
 
 void AppManager_btnAppCallBack(void)

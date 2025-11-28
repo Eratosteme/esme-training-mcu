@@ -6,97 +6,49 @@
  ***********************************************************************************************************************
  * @file      CLOCK.c
  *
- * @author    Jean DEBAINS
- * @date      Wednesday, January 31, 2024.
- *
- * @version   0.0.0
- *
  * @brief     CLOCK Hardware core part
- * @details   Module in charge of the management of the system clock
- *
- * @remark    This file contains only the Core part of the module, all configurations are defined in the CLOCK_cfg.h
- *
- * @remark    Coding Language: C
- *
- * @copyright Copyright (c) 2024 This software is used for education proposal
+ * @details   All CONFIG bits must be placed in device_config.c.
+ *            This module only configures the oscillator at runtime.
  *
  ***********************************************************************************************************************
  */
 
-
-
-/**********************************************************************************************************************/
-/* INCLUDE FILES                                                                                                      */
-/**********************************************************************************************************************/
 #include "CLOCK.h"
 
-
-/**********************************************************************************************************************/
-/* CONSTANTS, MACROS                                                                                                  */
-/**********************************************************************************************************************/
-
-
-
-/**********************************************************************************************************************/
-/* TYPES                                                                                                              */
-/**********************************************************************************************************************/
-
-
-
-/**********************************************************************************************************************/
-/* PRIVATE VARIABLES                                                                                                  */
-/**********************************************************************************************************************/
-
-
-
-/**********************************************************************************************************************/
-/* PRIVATE FUNCTIONS PROTOTYPES                                                                                       */
-/**********************************************************************************************************************/
-
-
-
-/**********************************************************************************************************************/
-/* PRIVATE FUNCTION DEFINITIONS                                                                                       */
-/**********************************************************************************************************************/
-
-
-
-/**********************************************************************************************************************/
-/* PUBLIC FUNCTION DEFINITIONS                                                                                        */
-/**********************************************************************************************************************/
 void CLOCK_vidInitialize(void)
 {
-  #pragma config FEXTOSC = OFF
+    /* IMPORTANT :
+     * Tous les #pragma config sont SUPPRIMÉS.
+     * Le choix de RSTOSC = EXTOSC est fait dans device_config.c uniquement.
+     */
 
-#if(CLOCK_CONFIG_HFINTOSC_MHZ == 1)
-  #pragma config RSTOSC = HFINTOSC_1MHZ
-#if(CLOCK_CONFIG_FOSC_FREQUENCY_MHZ != CLOCK_FOSC_FREQUENCY_01MHZ)
-#error The config "CLOCK_CONFIG_FOSC_FREQUENCY_MHZ" can only have the value "1" in this case
-#endif //CLOCK_CONFIG_FOSC_FREQUENCY_MHZ
-#elif(CLOCK_CONFIG_HFINTOSC_MHZ == 64)
-  #pragma config RSTOSC  = HFINTOSC_64MHZ
+#if (CLOCK_CONFIG_HFINTOSC_MHZ == 1)
 
-#if(CLOCK_CONFIG_FOSC_FREQUENCY_MHZ == CLOCK_FOSC_FREQUENCY_01MHZ)
-  OSCCON1bits.NDIV = 0b0110;
-#elif(CLOCK_CONFIG_FOSC_FREQUENCY_MHZ == CLOCK_FOSC_FREQUENCY_02MHZ)
-  OSCCON1bits.NDIV = 0b0101;
-#elif(CLOCK_CONFIG_FOSC_FREQUENCY_MHZ == CLOCK_FOSC_FREQUENCY_04MHZ)
-  OSCCON1bits.NDIV = 0b0100;
-#elif(CLOCK_CONFIG_FOSC_FREQUENCY_MHZ == CLOCK_FOSC_FREQUENCY_08MHZ)
-  OSCCON1bits.NDIV = 0b0011;
-#elif(CLOCK_CONFIG_FOSC_FREQUENCY_MHZ == CLOCK_FOSC_FREQUENCY_16MHZ)
-  OSCCON1bits.NDIV = 0b0010;
-#elif(CLOCK_CONFIG_FOSC_FREQUENCY_MHZ == CLOCK_FOSC_FREQUENCY_32MHZ)
-  OSCCON1bits.NDIV = 0b0001;
-#elif(CLOCK_CONFIG_FOSC_FREQUENCY_MHZ == CLOCK_FOSC_FREQUENCY_64MHZ)
-  OSCCON1bits.NDIV = 0b0000;
+    /* Sélection du diviseur pour obtenir 1 MHz */
+    OSCCON1bits.NDIV = 0b0110;   // 64 ? 1 MHz
+
+#elif (CLOCK_CONFIG_HFINTOSC_MHZ == 64)
+
+    /* Configuration du diviseur en fonction de la fréquence FOSC choisie */
+#if   (CLOCK_CONFIG_FOSC_FREQUENCY_MHZ == CLOCK_FOSC_FREQUENCY_01MHZ)
+    OSCCON1bits.NDIV = 0b0110;
+#elif (CLOCK_CONFIG_FOSC_FREQUENCY_MHZ == CLOCK_FOSC_FREQUENCY_02MHZ)
+    OSCCON1bits.NDIV = 0b0101;
+#elif (CLOCK_CONFIG_FOSC_FREQUENCY_MHZ == CLOCK_FOSC_FREQUENCY_04MHZ)
+    OSCCON1bits.NDIV = 0b0100;
+#elif (CLOCK_CONFIG_FOSC_FREQUENCY_MHZ == CLOCK_FOSC_FREQUENCY_08MHZ)
+    OSCCON1bits.NDIV = 0b0013;
+#elif (CLOCK_CONFIG_FOSC_FREQUENCY_MHZ == CLOCK_FOSC_FREQUENCY_16MHZ)
+    OSCCON1bits.NDIV = 0b0010;
+#elif (CLOCK_CONFIG_FOSC_FREQUENCY_MHZ == CLOCK_FOSC_FREQUENCY_32MHZ)
+    OSCCON1bits.NDIV = 0b0001;
+#elif (CLOCK_CONFIG_FOSC_FREQUENCY_MHZ == CLOCK_FOSC_FREQUENCY_64MHZ)
+    OSCCON1bits.NDIV = 0b0000;
 #else
-  #error Wrong value for the config "CLOCK_CONFIG_FOSC_FREQUENCY_MHZ"
+#error Wrong value for the config "CLOCK_CONFIG_FOSC_FREQUENCY_MHZ"
 #endif
+
 #else
-  #error The config "CLOCK_CONFIG_HFINTOSC_MHZ" could have only either value "1" (1 MHz) or value "64" (64 MHz)
-#endif //CLOCK_CONFIG_HFINTOSC_MHZ
+#error CLOCK_CONFIG_HFINTOSC_MHZ must be 1 or 64
+#endif
 }
-
-
-/*--------------------------------------------------------------------------------------------------------------------*/
